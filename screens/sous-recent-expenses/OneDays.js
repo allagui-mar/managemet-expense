@@ -1,13 +1,12 @@
-import ExpensesOutput from "../components/ExpensesOutput/ExpensesOutput";
 import { useContext, useEffect, useState } from "react";
+import ExpensesOutput from "../../components/ExpensesOutput/ExpensesOutput";
+import { ExpensesContext } from "../../store/expense-context";
+import { getDatesMinusDays } from "../../util/date";
+import { fetchExpenses } from "../../util/http";
+import ErrorOverlay from "../../components/UI/ErrorOverlay";
+import LoadingOverlay from "../../components/UI/LoadingOverlay";
 
-import { fetchExpenses } from "../util/http";
-import LoadingOverlay from "../components/UI/LoadingOverlay";
-import ErrorOverlay from "../components/UI/ErrorOverlay";
-import { ExpensesContext } from "../store/expense-context";
-import { getDatesMinusDays } from "../util/date";
-
-const RecentExpenses = () => {
+const OneDays = () => {
   [isFetching, setIsFetching] = useState(true);
   [error, setError] = useState();
   const expensesCtx = useContext(ExpensesContext);
@@ -36,16 +35,15 @@ const RecentExpenses = () => {
   }
   const recentExpenses = expensesCtx.expenses.filter((expense) => {
     const today = new Date();
-    const date7daysAgo = getDatesMinusDays(today, 7);
-    return expense.date > date7daysAgo;
+    const date1daysAgo = getDatesMinusDays(today, 1);
+    return expense.date >= date1daysAgo;
   });
   return (
     <ExpensesOutput
       expenses={recentExpenses}
-      expensePeriod="Last 7 days"
-      fallbackText="No expenses registered for the last 7 days"
+      expensePeriod="Last 1 days"
+      fallbackText="No expenses registered for the last 1 day"
     />
   );
 };
-
-export default RecentExpenses;
+export default OneDays;

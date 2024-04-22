@@ -9,9 +9,40 @@ import { GlobalStyles } from "./constants/styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import IconButton from "./components/UI/IconButton";
 import ExpensesContextProvider from "./store/expense-context";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import ThreeDays from "./screens/sous-recent-expenses/ThreeDays";
+import SevenDays from "./screens/sous-recent-expenses/SevenDays";
+import MonthDaysAgo from "./screens/sous-recent-expenses/MonthDaysAgo";
+import OneDays from "./screens/sous-recent-expenses/OneDays";
+import ThreeMonthsAgo from "./screens/sous-recent-expenses/ThreeMonthsAgo";
+import "react-native-gesture-handler";
+import DateActual from "./util/DateActual";
+import { View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+
+const RecentExpensesDrawer = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: GlobalStyles.colors.personalize200 },
+        headerTintColor: "white",
+        sceneContainerStyle: { backgroundColor: "#c32275" },
+        drawerContentStyle: { backgroundColor: "#c3187c" },
+        drawerInactiveTintColor: "white",
+        drawerActiveTintColor: "#351442",
+        drawerActiveBackgroundColor: "#d4a98f",
+      }}>
+      <Drawer.Screen name="OneDays" component={OneDays} />
+      <Drawer.Screen name="ThreeDays" component={ThreeDays} />
+      <Drawer.Screen name="SevenDays" component={SevenDays} />
+      <Drawer.Screen name="OneMonth" component={MonthDaysAgo} />
+      <Drawer.Screen name="ThreeMonths" component={ThreeMonthsAgo} />
+    </Drawer.Navigator>
+  );
+};
 
 const ExpenseOverview = () => {
   return (
@@ -22,23 +53,32 @@ const ExpenseOverview = () => {
         tabBarStyle: { backgroundColor: GlobalStyles.colors.personalize },
         tabBarActiveTintColor: GlobalStyles.colors.primary500,
         headerRight: ({ tintColor }) => (
-          <IconButton
-            icon="add"
-            size={28}
-            color={tintColor}
-            onPress={() => {
-              navigation.navigate("ManageExpenses");
-            }}
-          />
+          <View
+            style={{
+              flexDirection: "row",
+
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}>
+            <DateActual />
+            <IconButton
+              icon="add"
+              size={28}
+              color={tintColor}
+              onPress={() => {
+                navigation.navigate("ManageExpenses");
+              }}
+            />
+          </View>
         ),
       })}>
       <BottomTabs.Screen
         name="RecentExpenses"
-        component={RecentExpenses}
+        component={RecentExpensesDrawer}
         options={{
           title: "Recent Expenses",
-
           tabBarLabel: "Recent",
+
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" size={size} color={color} />
           ),

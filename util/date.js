@@ -1,7 +1,15 @@
-export const getFormattedDate = (date) => {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+export const getFormattedDate = (dateString) => {
+  const date = new Date(dateString);
+
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date string passed to getFormattedDate");
+  }
+
+  return date.toISOString().slice(0, 10);
 };
 
 export const getDatesMinusDays = (date, days) => {
-  return new Date(date.getFullYear(), date.getMonth(), date.getMonth() - days);
+  const result = new Date(date);
+  result.setDate(result.getDate() - days);
+  return result;
 };

@@ -1,13 +1,11 @@
-import ExpensesOutput from "../components/ExpensesOutput/ExpensesOutput";
 import { useContext, useEffect, useState } from "react";
+import ExpensesOutput from "../../components/ExpensesOutput/ExpensesOutput";
+import { ExpensesContext } from "../../store/expense-context";
+import { getDatesMinusDays } from "../../util/date";
+import { fetchExpenses } from "../../util/http";
+import LoadingOverlay from "../../components/UI/LoadingOverlay";
 
-import { fetchExpenses } from "../util/http";
-import LoadingOverlay from "../components/UI/LoadingOverlay";
-import ErrorOverlay from "../components/UI/ErrorOverlay";
-import { ExpensesContext } from "../store/expense-context";
-import { getDatesMinusDays } from "../util/date";
-
-const RecentExpenses = () => {
+const SevenDays = () => {
   [isFetching, setIsFetching] = useState(true);
   [error, setError] = useState();
   const expensesCtx = useContext(ExpensesContext);
@@ -48,4 +46,4 @@ const RecentExpenses = () => {
   );
 };
 
-export default RecentExpenses;
+export default SevenDays;
